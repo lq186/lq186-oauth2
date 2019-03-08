@@ -21,7 +21,7 @@
 package com.lq186.oauth2.service;
 
 import com.lq186.common.util.RandomUtils;
-import com.lq186.oauth2.entity.PasswordUser;
+import com.lq186.oauth2.entity.Oauth2User;
 import com.lq186.oauth2.state.UserStates;
 import com.lq186.oauth2.user.SimpleUserDetailsImpl;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,16 +32,16 @@ public class SimpleUserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        PasswordUser passwordUser = new PasswordUser();
-        passwordUser.setId(1L);
-        passwordUser.setBzid(RandomUtils.randomUUID());
-        passwordUser.setUsername(username);
-        passwordUser.setPwd("{noop}123456");
-        passwordUser.setShowName(RandomUtils.randomString(5));
-        passwordUser.setHeadPicture(String.format("/images/head/%s.jpg", passwordUser.getBzid()));
-        passwordUser.setState(UserStates.NORMAL.getCode());
-        passwordUser.setCreatedTime(System.currentTimeMillis());
-        return new SimpleUserDetailsImpl(passwordUser);
+        Oauth2User oauth2User = new Oauth2User();
+        oauth2User.setId(1L);
+        oauth2User.setBzid(RandomUtils.randomUUID());
+        oauth2User.setUsername(username);
+        oauth2User.setPwd("{bcrypt}$2a$10$uUQbQS3fAV3jjfCiRulm7.ses2bfOVV5dizbfSrEbwj.5F4dGzHHq");
+        oauth2User.setShowName(RandomUtils.randomString(5));
+        oauth2User.setHeadPicture(String.format("/images/head/%s.jpg", oauth2User.getBzid()));
+        oauth2User.setState(UserStates.NORMAL.getCode());
+        oauth2User.setCreatedTime(System.currentTimeMillis());
+        return new SimpleUserDetailsImpl(oauth2User);
     }
 
 }

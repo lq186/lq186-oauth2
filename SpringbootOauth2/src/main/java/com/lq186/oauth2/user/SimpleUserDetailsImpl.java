@@ -20,7 +20,7 @@
 */
 package com.lq186.oauth2.user;
 
-import com.lq186.oauth2.entity.PasswordUser;
+import com.lq186.oauth2.entity.Oauth2User;
 import com.lq186.oauth2.state.UserStates;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,15 +29,15 @@ import java.util.Collection;
 
 public class SimpleUserDetailsImpl implements UserDetails {
 
-    private final PasswordUser passwordUser;
+    private final Oauth2User oauth2User;
 
-    public SimpleUserDetailsImpl(PasswordUser passwordUser) {
-        this.passwordUser = passwordUser;
+    public SimpleUserDetailsImpl(Oauth2User oauth2User) {
+        this.oauth2User = oauth2User;
     }
 
     @Override
     public String getUsername() {
-        return passwordUser.getUsername();
+        return oauth2User.getUsername();
     }
 
     @Override
@@ -47,7 +47,7 @@ public class SimpleUserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return passwordUser.getPwd();
+        return oauth2User.getPwd();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class SimpleUserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return null != passwordUser.getState() && UserStates.LOCKED.getCode() != passwordUser.getState().intValue();
+        return null != oauth2User.getState() && UserStates.LOCKED.getCode() != oauth2User.getState().intValue();
     }
 
     @Override
@@ -67,10 +67,10 @@ public class SimpleUserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return null != passwordUser.getState() && UserStates.DISABLED.getCode() != passwordUser.getState().intValue();
+        return null != oauth2User.getState() && UserStates.DISABLED.getCode() != oauth2User.getState().intValue();
     }
 
     private boolean isAccountNormal() {
-        return null != passwordUser.getState() && UserStates.NORMAL.getCode() == passwordUser.getState().intValue();
+        return null != oauth2User.getState() && UserStates.NORMAL.getCode() == oauth2User.getState().intValue();
     }
 }

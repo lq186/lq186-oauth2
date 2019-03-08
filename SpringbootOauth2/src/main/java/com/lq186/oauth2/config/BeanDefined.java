@@ -20,14 +20,35 @@
 */
 package com.lq186.oauth2.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lq186.common.springboot.config.ConfigUtils;
+import com.lq186.oauth2.handler.ResultBeanExceptionTranslator;
+import com.lq186.oauth2.service.SimpleAuthorizationCodeServicesImpl;
+import com.lq186.oauth2.service.SimpleClientDetailServiceImpl;
 import com.lq186.oauth2.service.SimpleUserDetailServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+
+import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class BeanDefined {
+
+    public static final String CLIENT_DETAILS_SERVICE = "customClientDetailsService";
 
     @Bean
     @Primary
@@ -35,4 +56,56 @@ public class BeanDefined {
         return new SimpleUserDetailServiceImpl();
     }
 
+    @Bean(BeanDefined.CLIENT_DETAILS_SERVICE)
+    @Primary
+    public ClientDetailsService clientDetailsService() {
+        return new SimpleClientDetailServiceImpl();
+    }
+
+    @Bean
+    @Primary
+    public TokenStore tokenStore() {
+        return new InMemoryTokenStore();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService());
+        provider.setPasswordEncoder(passwordEncoder());
+        return new ProviderManager(Collections.singletonList(provider));
+    }
+
+    @Bean
+    public AuthorizationCodeServices authorizationCodeServices() {
+        return new SimpleAuthorizationCodeServicesImpl();
+    }
+
+    @Bean
+    public AuthorizationServerTokenServices authorizationServerTokenServices() {
+        DefaultTokenServices tokenServices = new DefaultTokenServices();
+        tokenServices.setTokenStore(tokenStore());
+        tokenServices.setSupportRefreshToken(true);
+        tokenServices.setAccessTokenValiditySeconds((int) TimeUnit.HOURS.toSeconds(2));
+        tokenServices.setRefreshTokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(1));
+        tokenServices.setReuseRefreshToken(false);
+        return tokenServices;
+    }
+
+    @Bean
+    @Primary
+    public ObjectMapper objectMapper() {
+        return ConfigUtils.getObjectMapper();
+    }
+
+    @Bean
+    @Primary
+    public ResultBeanExceptionTranslator resultBeanExceptionTranslator() {
+        return new ResultBeanExceptionTranslator();
+    }
 }

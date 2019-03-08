@@ -20,18 +20,21 @@
 */
 package com.lq186.oauth2.config;
 
+import com.lq186.oauth2.handler.ResultBeanExceptionTranslator;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import javax.annotation.Resource;
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableAuthorizationServer
@@ -40,23 +43,43 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Resource
     private AuthenticationManager authenticationManager;
 
+    @Resource
+    private TokenStore tokenStore;
+
+    @Resource(name = BeanDefined.CLIENT_DETAILS_SERVICE)
+    private ClientDetailsService clientDetailsService;
+
+    @Resource
+    private UserDetailsService userDetailsService;
+
+    @Resource
+    private AuthorizationCodeServices authorizationCodeServices;
+
+    @Resource
+    private AuthorizationServerTokenServices authorizationServerTokenServices;
+
+    @Resource
+    private ResultBeanExceptionTranslator resultBeanExceptionTranslator;
+
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security.allowFormAuthenticationForClients().tokenKeyAccess("isAuthenticated()").checkTokenAccess("permitAll()");
+        security.tokenKeyAccess("permitAll()")
+                .checkTokenAccess("isAuthenticated()")
+                .allowFormAuthenticationForClients(); // 允许表单登录
+    }
+
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        clients.withClientDetails(clientDetailsService);
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.tokenStore(new InMemoryTokenStore()).authenticationManager(authenticationManager)
-                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST);
-
-        DefaultTokenServices tokenServices = new DefaultTokenServices();
-        tokenServices.setTokenStore(endpoints.getTokenStore());
-        tokenServices.setSupportRefreshToken(true);
-        tokenServices.setTokenEnhancer(endpoints.getTokenEnhancer());
-        tokenServices.setAccessTokenValiditySeconds((int) TimeUnit.HOURS.toSeconds(2));
-        tokenServices.setRefreshTokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(1));
-        tokenServices.setReuseRefreshToken(false);
-        endpoints.tokenServices(tokenServices);
+        endpoints.userDetailsService(userDetailsService);
+        endpoints.tokenStore(tokenStore);
+        endpoints.authorizationCodeServices(authorizationCodeServices);
+        endpoints.authenticationManager(authenticationManager);
+        endpoints.tokenServices(authorizationServerTokenServices);
+        endpoints.exceptionTranslator(resultBeanExceptionTranslator);
     }
 }
