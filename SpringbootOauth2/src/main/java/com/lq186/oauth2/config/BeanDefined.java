@@ -25,6 +25,7 @@ import com.lq186.common.springboot.config.ConfigUtils;
 import com.lq186.oauth2.handler.ResultBeanExceptionTranslator;
 import com.lq186.oauth2.service.SimpleAuthorizationCodeServicesImpl;
 import com.lq186.oauth2.service.SimpleClientDetailServiceImpl;
+import com.lq186.oauth2.service.SimpleTokenServicesImpl;
 import com.lq186.oauth2.service.SimpleUserDetailServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,14 +36,23 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.provider.*;
+import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenGranter;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeTokenGranter;
+import org.springframework.security.oauth2.provider.implicit.ImplicitTokenGranter;
+import org.springframework.security.oauth2.provider.password.ResourceOwnerPasswordTokenGranter;
+import org.springframework.security.oauth2.provider.refresh.RefreshTokenGranter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -88,7 +98,7 @@ public class BeanDefined {
 
     @Bean
     public AuthorizationServerTokenServices authorizationServerTokenServices() {
-        DefaultTokenServices tokenServices = new DefaultTokenServices();
+        DefaultTokenServices tokenServices = new SimpleTokenServicesImpl();
         tokenServices.setTokenStore(tokenStore());
         tokenServices.setSupportRefreshToken(true);
         tokenServices.setAccessTokenValiditySeconds((int) TimeUnit.HOURS.toSeconds(2));
@@ -108,4 +118,5 @@ public class BeanDefined {
     public ResultBeanExceptionTranslator resultBeanExceptionTranslator() {
         return new ResultBeanExceptionTranslator();
     }
+
 }

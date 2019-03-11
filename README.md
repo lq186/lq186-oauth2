@@ -8,11 +8,14 @@ http://127.0.0.1:8080/oauth/token?username=admin&password=123456&grant_type=pass
 返回数据示例：
 ``` json
 {
-    "access_token": "0f973db4-f780-4e24-957b-33784198dfb2",
-    "token_type": "bearer",
-    "refresh_token": "b18322ce-2632-4c53-a7a9-dc2de1c0572c",
-    "expires_in": 6536,
-    "scope": "read"
+    "code": 0,
+    "data": {
+        "access_token": "f6acd0e4-5809-4ec1-ac60-2a7733959620",
+        "token_type": "bearer",
+        "refresh_token": "c98d829c-6bb5-4044-b69f-7aecbf1a7ed5",
+        "expires_in": 7189,
+        "scope": "read"
+    }
 }
 ```
 
@@ -37,11 +40,14 @@ http://127.0.0.1:8080/oauth/token?grant_type=authorization_code&scope=read&clien
 返回数据示例：
 ``` json
 {
-    "access_token": "0f973db4-f780-4e24-957b-33784198dfb2",
-    "token_type": "bearer",
-    "refresh_token": "b18322ce-2632-4c53-a7a9-dc2de1c0572c",
-    "expires_in": 6575,
-    "scope": "read"
+    "code": 0,
+    "data": {
+        "access_token": "f6acd0e4-5809-4ec1-ac60-2a7733959620",
+        "token_type": "bearer",
+        "refresh_token": "c98d829c-6bb5-4044-b69f-7aecbf1a7ed5",
+        "expires_in": 7189,
+        "scope": "read"
+    }
 }
 ```
 
@@ -53,10 +59,13 @@ http://127.0.0.1:8080/oauth/token?grant_type=client_credentials&scope=read&clien
 返回数据示例：
 ``` json
 {
-    "access_token": "ee60351d-57ea-4b30-8bab-9d78cada925d",
-    "token_type": "bearer",
-    "expires_in": 7199,
-    "scope": "read"
+    "code": 0,
+    "data": {
+        "access_token": "cf5ca68b-fdba-4e78-a2fd-994b0149516e",
+        "token_type": "bearer",
+        "expires_in": 7186,
+        "scope": "read"
+    }
 }
 ```
 
@@ -81,11 +90,14 @@ http://127.0.0.1:8080/oauth/token?grant_type=refresh_token&refresh_token=95a03a9
 返回数据示例：
 ```json
 {
-    "access_token": "4dc33129-f0b3-4d59-83a8-c9ef3ef28c07",
-    "token_type": "bearer",
-    "refresh_token": "a25f7c52-3724-4c90-b626-ab8a78abef77",
-    "expires_in": 7199,
-    "scope": "read"
+    "code": 0,
+    "data": {
+        "access_token": "f6acd0e4-5809-4ec1-ac60-2a7733959620",
+        "token_type": "bearer",
+        "refresh_token": "c98d829c-6bb5-4044-b69f-7aecbf1a7ed5",
+        "expires_in": 7189,
+        "scope": "read"
+    }
 }
 ```
 
