@@ -11,7 +11,7 @@
     <groupId>com.lq186</groupId>
     <artifactId>springboot-oauth2</artifactId>
     <version>1.0</version>
-    <name>springboot-oauth2</name>
+    <display>springboot-oauth2</display>
     <description>基于SpringBoot的OAuth2示例</description>
 
     <properties>

@@ -20,8 +20,8 @@
 */
 package com.lq186.oauth2.user;
 
-import com.lq186.oauth2.entity.Oauth2User;
-import com.lq186.oauth2.state.UserStates;
+import com.lq186.oauth2.entity.OAuth2User;
+import com.lq186.oauth2.state.OAuth2UserState;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -29,9 +29,9 @@ import java.util.Collection;
 
 public class SimpleUserDetailsImpl implements UserDetails {
 
-    private final Oauth2User oauth2User;
+    private final OAuth2User oauth2User;
 
-    public SimpleUserDetailsImpl(Oauth2User oauth2User) {
+    public SimpleUserDetailsImpl(OAuth2User oauth2User) {
         this.oauth2User = oauth2User;
     }
 
@@ -57,7 +57,7 @@ public class SimpleUserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return null != oauth2User.getState() && UserStates.LOCKED.getCode() != oauth2User.getState().intValue();
+        return null != oauth2User.getState() && OAuth2UserState.LOCKED.getCode() != oauth2User.getState().intValue();
     }
 
     @Override
@@ -67,10 +67,10 @@ public class SimpleUserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return null != oauth2User.getState() && UserStates.DISABLED.getCode() != oauth2User.getState().intValue();
+        return null != oauth2User.getState() && OAuth2UserState.DISABLED.getCode() != oauth2User.getState().intValue();
     }
 
     private boolean isAccountNormal() {
-        return null != oauth2User.getState() && UserStates.NORMAL.getCode() == oauth2User.getState().intValue();
+        return null != oauth2User.getState() && OAuth2UserState.NORMAL.getCode() == oauth2User.getState().intValue();
     }
 }

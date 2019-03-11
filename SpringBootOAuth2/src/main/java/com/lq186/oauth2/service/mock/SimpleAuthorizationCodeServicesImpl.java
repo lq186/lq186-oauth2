@@ -18,7 +18,7 @@
     Date: 2019/3/8
     Author: lq
 */
-package com.lq186.oauth2.service;
+package com.lq186.oauth2.service.mock;
 
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.code.RandomValueAuthorizationCodeServices;

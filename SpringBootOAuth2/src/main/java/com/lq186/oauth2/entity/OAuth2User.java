@@ -14,13 +14,13 @@
     limitations under the License.
 */
 /*
-    FileName: Oauth2User.java
+    FileName: OAuth2User.java
     Date: 2019/3/7
     Author: lq
 */
 package com.lq186.oauth2.entity;
 
-public final class Oauth2User extends EntityIdBean {
+public final class OAuth2User extends EntityIdBean {
 
     private String username; // 用户名，UK
 

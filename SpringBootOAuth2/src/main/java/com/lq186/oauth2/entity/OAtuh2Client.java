@@ -14,13 +14,13 @@
     limitations under the License.
 */
 /*
-    FileName: Oatuh2Client.java
+    FileName: OAtuh2Client.java
     Date: 2019/3/8
     Author: lq
 */
 package com.lq186.oauth2.entity;
 
-public class Oatuh2Client extends EntityIdBean {
+public class OAtuh2Client extends EntityIdBean {
 
     private String clientId; // 客户端ID
 

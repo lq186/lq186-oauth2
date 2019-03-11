@@ -14,30 +14,30 @@
     limitations under the License.
 */
 /*
-    FileName: UserStates.java
+    FileName: OAuth2UserState.java
     Date: 2019/3/7
     Author: lq
 */
 package com.lq186.oauth2.state;
 
-public enum UserStates {
+public enum OAuth2UserState {
 
     NORMAL(0, "正常"), LOCKED(1, "锁定"), DISABLED(2, "禁用");
 
     private final int code;
 
-    private final String name;
+    private final String display;
 
-    UserStates(int code, String name) {
+    OAuth2UserState(int code, String display) {
         this.code = code;
-        this.name = name;
+        this.display = display;
     }
 
     public int getCode() {
         return code;
     }
 
-    public String getName() {
-        return name;
+    public String getDisplay() {
+        return display;
     }
 }

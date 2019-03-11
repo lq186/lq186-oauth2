@@ -22,9 +22,9 @@ package com.lq186.oauth2.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lq186.common.springboot.config.ConfigUtils;
-import com.lq186.oauth2.service.SimpleAuthorizationCodeServicesImpl;
-import com.lq186.oauth2.service.SimpleClientDetailServiceImpl;
-import com.lq186.oauth2.service.SimpleUserDetailServiceImpl;
+import com.lq186.oauth2.service.mock.SimpleAuthorizationCodeServicesImpl;
+import com.lq186.oauth2.service.mock.SimpleClientDetailServiceImpl;
+import com.lq186.oauth2.service.mock.SimpleUserDetailServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
