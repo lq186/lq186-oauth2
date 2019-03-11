@@ -22,7 +22,6 @@ package com.lq186.oauth2.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lq186.common.springboot.config.ConfigUtils;
-import com.lq186.oauth2.handler.ResultBeanExceptionTranslator;
 import com.lq186.oauth2.service.SimpleAuthorizationCodeServicesImpl;
 import com.lq186.oauth2.service.SimpleClientDetailServiceImpl;
 import com.lq186.oauth2.service.SimpleUserDetailServiceImpl;
@@ -103,9 +102,4 @@ public class BeanDefined {
         return ConfigUtils.getObjectMapper();
     }
 
-    @Bean
-    @Primary
-    public ResultBeanExceptionTranslator resultBeanExceptionTranslator() {
-        return new ResultBeanExceptionTranslator();
-    }
 }

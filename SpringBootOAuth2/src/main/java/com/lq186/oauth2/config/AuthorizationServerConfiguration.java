@@ -20,7 +20,6 @@
 */
 package com.lq186.oauth2.config;
 
-import com.lq186.oauth2.handler.ResultBeanExceptionTranslator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -58,9 +57,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Resource
     private AuthorizationServerTokenServices authorizationServerTokenServices;
 
-    @Resource
-    private ResultBeanExceptionTranslator resultBeanExceptionTranslator;
-
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security.tokenKeyAccess("permitAll()")
@@ -80,6 +76,5 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         endpoints.authorizationCodeServices(authorizationCodeServices);
         endpoints.authenticationManager(authenticationManager);
         endpoints.tokenServices(authorizationServerTokenServices);
-        endpoints.exceptionTranslator(resultBeanExceptionTranslator);
     }
 }
