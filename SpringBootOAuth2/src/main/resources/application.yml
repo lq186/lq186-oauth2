@@ -1,1 +1,6 @@
+spring:
+  profiles:
+    active: dev
 
+frontend:
+  title: LQ186 OAuth2 Server

@@ -14,28 +14,47 @@
     limitations under the License.
 */
 /*
-    FileName: OAtuh2Client.java
+    FileName: OAuth2Client.java
     Date: 2019/3/8
     Author: lq
 */
 package com.lq186.oauth2.entity;
 
-public class OAtuh2Client extends EntityIdBean {
+import com.lq186.oauth2.consts.EntityMapping;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = EntityMapping.OAUTH2_CLIENT)
+public class OAuth2Client extends EntityIdBean {
+
+    @Column(name = "client_id", unique = true, nullable = false, length = 32)
     private String clientId; // 客户端ID
 
+    @Column(name = "client_secret", nullable = false, length = 128)
     private String clientSecret; // 客户端密钥
 
+    @Column(name = "kwm_name", nullable = false, length = 128)
     private String name; // 客户端名称
 
+    @Column(name = "logo", nullable = false, length = 128)
+    private String logo; // 客户端LOGO
+
+    @Column(name = "kwm_state", nullable = false)
     private Integer state; // 客户端状态
 
+    @Column(name = "grant_type", nullable = false, length = 128)
     private String grantType; // 授权类型[authorization_code, client_credentials, password, implicit, refresh_token]
 
+    @Column(name = "kwm_scope", nullable = false, length = 128)
     private String scope; // 授权范围
 
+    @Column(name = "redirect_url", nullable = false, length = 250)
     private String redirectUrl; // 重定向地址
 
+    @Column(name = "created_time", nullable = false)
     private Long createdTime; // 创建时间
 
     public String getClientId() {
@@ -60,6 +79,14 @@ public class OAtuh2Client extends EntityIdBean {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public Integer getState() {

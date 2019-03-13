@@ -14,42 +14,30 @@
     limitations under the License.
 */
 /*
-    FileName: EntityIdBean.java
+    FileName: OAuth2UserState.java
     Date: 2019/3/7
     Author: lq
 */
-package com.lq186.oauth2.entity;
+package com.lq186.oauth2.state;
 
-import com.lq186.common.bean.EntityId;
+public enum OAuth2ClientState {
 
-import javax.persistence.*;
+    NORMAL(0, "正常"), LOCKED(1, "锁定"), DISABLED(2, "禁用");
 
-@MappedSuperclass
-public class EntityIdBean implements EntityId {
+    private final int code;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    private final String display;
 
-    @Column(name = "bzid", unique = true, nullable = false, length = 32)
-    private String bzid;
-
-    public void setId(Long id) {
-        this.id = id;
+    OAuth2ClientState(int code, String display) {
+        this.code = code;
+        this.display = display;
     }
 
-    public void setBzid(String bzid) {
-        this.bzid = bzid;
+    public int getCode() {
+        return code;
     }
 
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public String getBzid() {
-        return bzid;
+    public String getDisplay() {
+        return display;
     }
 }

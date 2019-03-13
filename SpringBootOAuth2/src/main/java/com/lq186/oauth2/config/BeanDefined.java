@@ -22,9 +22,11 @@ package com.lq186.oauth2.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lq186.common.springboot.config.ConfigUtils;
+import com.lq186.oauth2.repo.OAuth2ClientRepo;
+import com.lq186.oauth2.repo.OAuth2UserRepo;
+import com.lq186.oauth2.service.jpa.JpaClientDetailsServiceImpl;
+import com.lq186.oauth2.service.jpa.JpaUserDetailsServiceImpl;
 import com.lq186.oauth2.service.mock.SimpleAuthorizationCodeServicesImpl;
-import com.lq186.oauth2.service.mock.SimpleClientDetailServiceImpl;
-import com.lq186.oauth2.service.mock.SimpleUserDetailServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -41,6 +43,7 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
+import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -49,16 +52,22 @@ public class BeanDefined {
 
     public static final String CLIENT_DETAILS_SERVICE = "customClientDetailsService";
 
+    @Resource
+    private OAuth2UserRepo oAuth2UserRepo;
+
+    @Resource
+    private OAuth2ClientRepo oAuth2ClientRepo;
+
     @Bean
     @Primary
     public UserDetailsService userDetailsService() {
-        return new SimpleUserDetailServiceImpl();
+        return new JpaUserDetailsServiceImpl(oAuth2UserRepo);
     }
 
     @Bean(BeanDefined.CLIENT_DETAILS_SERVICE)
     @Primary
     public ClientDetailsService clientDetailsService() {
-        return new SimpleClientDetailServiceImpl();
+        return new JpaClientDetailsServiceImpl(oAuth2ClientRepo);
     }
 
     @Bean

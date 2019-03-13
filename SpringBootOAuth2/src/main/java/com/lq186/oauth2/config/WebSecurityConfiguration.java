@@ -35,11 +35,19 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().fullyAuthenticated()
+        // 先定义需要通过的URL
+        http.authorizeRequests().antMatchers("/oauth/**", "/login.html", "/login", "/error", "/css/**").permitAll()
                 .and()
-                .authorizeRequests().antMatchers("/oauth/**").permitAll()
+                .formLogin().loginPage("/login.html").loginProcessingUrl("/login").successForwardUrl("/css/common.css")
                 .and()
-                .formLogin().and().httpBasic();
+                // 最后定义其他所有的URL均需要保护
+                .authorizeRequests().anyRequest().authenticated()
+                .and()
+                .httpBasic()
+                .and()
+                .csrf().ignoringAntMatchers("/h2-console/**") // 对特定路径关闭csrf跨域拦截
+                .and()
+                .headers().frameOptions().sameOrigin(); // 同源允许IFrame
     }
 
 
