@@ -26,10 +26,12 @@ import com.lq186.oauth2.repo.OAuth2ClientRepo;
 import com.lq186.oauth2.repo.OAuth2UserRepo;
 import com.lq186.oauth2.service.jpa.JpaClientDetailsServiceImpl;
 import com.lq186.oauth2.service.jpa.JpaUserDetailsServiceImpl;
-import com.lq186.oauth2.service.mock.SimpleAuthorizationCodeServicesImpl;
+import com.lq186.oauth2.service.redis.RedisAuthorizationCodeServicesImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -42,6 +44,7 @@ import org.springframework.security.oauth2.provider.token.AuthorizationServerTok
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.annotation.Resource;
 import java.util.Collections;
@@ -58,6 +61,9 @@ public class BeanDefined {
     @Resource
     private OAuth2ClientRepo oAuth2ClientRepo;
 
+    @Resource
+    private RedisConnectionFactory redisConnectionFactory;
+
     @Bean
     @Primary
     public UserDetailsService userDetailsService() {
@@ -73,7 +79,7 @@ public class BeanDefined {
     @Bean
     @Primary
     public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
+        return new RedisTokenStore(redisConnectionFactory);
     }
 
     @Bean
@@ -91,7 +97,7 @@ public class BeanDefined {
 
     @Bean
     public AuthorizationCodeServices authorizationCodeServices() {
-        return new SimpleAuthorizationCodeServicesImpl();
+        return new RedisAuthorizationCodeServicesImpl();
     }
 
     @Bean
@@ -109,6 +115,12 @@ public class BeanDefined {
     @Primary
     public ObjectMapper objectMapper() {
         return ConfigUtils.getObjectMapper();
+    }
+
+    @Bean
+    @Primary
+    public RedisTemplate<String, Object> redisTemplate() {
+        return ConfigUtils.getRedisTemplate(redisConnectionFactory);
     }
 
 }
