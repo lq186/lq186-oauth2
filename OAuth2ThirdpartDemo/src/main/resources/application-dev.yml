@@ -1,0 +1,8 @@
+server:
+  port: 9080
+
+spring:
+  thymeleaf:
+    prefix: classpath:/frontend/
+    cache: false
+    suffix: .html

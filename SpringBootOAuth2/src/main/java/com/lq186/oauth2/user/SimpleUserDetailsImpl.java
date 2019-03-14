@@ -73,4 +73,8 @@ public class SimpleUserDetailsImpl implements UserDetails {
     private boolean isAccountNormal() {
         return null != oauth2User.getState() && OAuth2UserState.NORMAL.getCode() == oauth2User.getState().intValue();
     }
+
+    public OAuth2User getOauth2User() {
+        return oauth2User;
+    }
 }

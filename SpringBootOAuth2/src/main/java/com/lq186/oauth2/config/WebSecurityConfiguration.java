@@ -26,19 +26,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) //启用方法级的权限认证
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // 先定义需要通过的URL
         http.authorizeRequests().antMatchers("/oauth/**", "/error", "/css/**", "/js/**", "/image/**", "/favicon.ico").permitAll()
                 .and()
-                .formLogin().loginPage("/login.html").loginProcessingUrl("/login").permitAll().defaultSuccessUrl("/css/common.css")
+                .formLogin().loginPage("/login.html").loginProcessingUrl("/login").permitAll()
                 .and()
                 // 最后定义其他所有的URL均需要保护
                 .authorizeRequests().anyRequest().authenticated()
