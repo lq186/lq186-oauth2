@@ -20,15 +20,41 @@
 */
 package com.lq186.oauth2.thirdpart.controller;
 
+import com.lq186.common.springboot.rest.RestRequestBody;
+import com.lq186.common.springboot.rest.RestResponseBody;
+import com.lq186.common.springboot.rest.RestUtils;
+import com.lq186.oauth2.thirdpart.consts.OAuth2Const;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 @Controller
 public class IndexController {
 
+    @Resource
+    private RestTemplate restTemplate;
+
     @RequestMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
-    public String index() {
+    public String index(HttpServletRequest request) {
+        /*RestRequestBody requestBody = new RestRequestBody();
+        requestBody.setUrl(OAuth2Const.TOKEN_URL);
+        requestBody.setMethod(HttpMethod.POST);
+        requestBody.addParameters(OAuth2Const.CLIENT_ID, OAuth2Const.CLIENT_ID_VALUE)
+                .addParameters(OAuth2Const.CLIENT_SECRET, OAuth2Const.CLIENT_SECRET_VALUE)
+                .addParameters(OAuth2Const.REDIRECT_URI, OAuth2Const.REDIRECT_URI_VALUE)
+                .addParameters(OAuth2Const.SCOPE, OAuth2Const.SCOPE_READ)
+                .addParameters(OAuth2Const.GRANT_TYPE, OAuth2Const.CLIENT_CREDENTIALS);
+        RestResponseBody<HashMap> responseBody = RestUtils.exchange(restTemplate, requestBody, HashMap.class);
+        if (HttpStatus.OK == responseBody.getHttpStatus()) {
+            request.setAttribute("token", responseBody.getBody());
+        }*/
         return "index";
     }
 
