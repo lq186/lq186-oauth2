@@ -14,24 +14,19 @@
     limitations under the License.
 */
 /*
-    FileName: OAuth2UserController.java
-    Date: 2019/3/14
+    FileName: ResourceServerConfiguration.java
+    Date: 2019/3/18
     Author: lq
 */
-package com.lq186.oauth2.controller;
+package com.lq186.oauth2.resource.config;
 
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 
-import java.security.Principal;
+@Configuration
+@EnableResourceServer
+public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-@RestController
-public class OAuth2UserController {
-
-    @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Principal user(Principal principal) {
-        return principal;
-    }
 
 }

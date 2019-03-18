@@ -29,6 +29,8 @@ import java.util.Collection;
 
 public class SimpleUserDetailsImpl implements UserDetails {
 
+    private static final long serialVersionUID = 1L;
+
     private final OAuth2User oauth2User;
 
     public SimpleUserDetailsImpl(OAuth2User oauth2User) {

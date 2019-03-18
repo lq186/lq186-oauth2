@@ -60,7 +60,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security.tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()")
+                .checkTokenAccess("permitAll()") // 允许 /oauth/check_token?token= 访问
                 .allowFormAuthenticationForClients(); // 允许表单登录
     }
 

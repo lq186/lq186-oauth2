@@ -21,14 +21,18 @@
 package com.lq186.oauth2.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 @Configuration
 @EnableWebSecurity
+@EnableResourceServer
+@Order(1)
 @EnableGlobalMethodSecurity(prePostEnabled = true) //启用方法级的权限认证
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -36,11 +40,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // 先定义需要通过的URL
         http.authorizeRequests().antMatchers("/oauth/**", "/error", "/css/**", "/js/**", "/image/**", "/favicon.ico").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login.html").loginProcessingUrl("/login").permitAll()
-                .and()
-                // 最后定义其他所有的URL均需要保护
-                .authorizeRequests().anyRequest().authenticated()
                 .and()
                 .httpBasic()
                 .and()

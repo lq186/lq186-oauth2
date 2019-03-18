@@ -14,23 +14,22 @@
     limitations under the License.
 */
 /*
-    FileName: OAuth2UserController.java
-    Date: 2019/3/14
+    FileName: UserInfoController.java
+    Date: 2019/3/18
     Author: lq
 */
-package com.lq186.oauth2.controller;
+package com.lq186.oauth2.resource.controller;
 
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
 @RestController
-public class OAuth2UserController {
+public class UserInfoController {
 
-    @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Principal user(Principal principal) {
+    @RequestMapping(value = {"/me"})
+    public Object userInfo(Principal principal) {
         return principal;
     }
 
