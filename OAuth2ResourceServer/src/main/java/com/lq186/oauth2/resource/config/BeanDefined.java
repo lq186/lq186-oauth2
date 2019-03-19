@@ -24,24 +24,25 @@ import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.lq186.common.springboot.config.ConfigUtils;
+import com.lq186.oauth2.resource.provider.OpenIdUserAuthenticationConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
-import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.*;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @Configuration
 public class BeanDefined {
 
+    /*
     @Resource
     private RedisConnectionFactory redisConnectionFactory;
 
@@ -57,15 +58,24 @@ public class BeanDefined {
         tokenServices.setTokenStore(tokenStore());
         return tokenServices;
     }
+    */
 
-    /*@Bean
+    @Bean
     public ResourceServerTokenServices remoteTokenService() {
         RemoteTokenServices remoteTokenServices = new RemoteTokenServices();
         remoteTokenServices.setClientId("92498c196acc4c74a346f0235c3b9c4c");
         remoteTokenServices.setClientSecret("123456");
         remoteTokenServices.setCheckTokenEndpointUrl("http://127.0.0.1:8080/oauth/check_token");
+        remoteTokenServices.setAccessTokenConverter(accessTokenConverter());
         return remoteTokenServices;
-    }*/
+    }
+
+    @Bean
+    public AccessTokenConverter accessTokenConverter() {
+        DefaultAccessTokenConverter defaultAccessTokenConverter = new DefaultAccessTokenConverter();
+        defaultAccessTokenConverter.setUserTokenConverter(new OpenIdUserAuthenticationConverter());
+        return defaultAccessTokenConverter;
+    }
 
     @Bean
     @Primary
@@ -73,10 +83,12 @@ public class BeanDefined {
         return ConfigUtils.getObjectMapper();
     }
 
+    /*
     @Bean
     @Primary
     public RedisTemplate<String, Object> redisTemplate() {
         return ConfigUtils.getRedisTemplate(redisConnectionFactory);
     }
+    */
 
 }

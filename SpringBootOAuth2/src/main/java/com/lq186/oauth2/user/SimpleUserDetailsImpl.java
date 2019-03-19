@@ -20,26 +20,38 @@
 */
 package com.lq186.oauth2.user;
 
-import com.lq186.oauth2.entity.OAuth2User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lq186.oauth2.state.OAuth2UserState;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+@JsonIgnoreProperties({"pwd", "password"})
 public class SimpleUserDetailsImpl implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
-    private final OAuth2User oauth2User;
+    private String username;
 
-    public SimpleUserDetailsImpl(OAuth2User oauth2User) {
-        this.oauth2User = oauth2User;
-    }
+    private String pwd;
+
+    private String showName;
+
+    private String headPicture;
+
+    private Integer state;
+
+    private Long createdTime;
+
+    private String loginIp;
+
+    private Long loginTime;
 
     @Override
     public String getUsername() {
-        return oauth2User.getUsername();
+        return username;
     }
 
     @Override
@@ -49,7 +61,7 @@ public class SimpleUserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return oauth2User.getPwd();
+        return pwd;
     }
 
     @Override
@@ -59,7 +71,7 @@ public class SimpleUserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return null != oauth2User.getState() && OAuth2UserState.LOCKED.getCode() != oauth2User.getState().intValue();
+        return null != state && OAuth2UserState.LOCKED.getCode() != state.intValue();
     }
 
     @Override
@@ -69,14 +81,70 @@ public class SimpleUserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return null != oauth2User.getState() && OAuth2UserState.DISABLED.getCode() != oauth2User.getState().intValue();
+        return null != state && OAuth2UserState.DISABLED.getCode() != state.intValue();
     }
 
     private boolean isAccountNormal() {
-        return null != oauth2User.getState() && OAuth2UserState.NORMAL.getCode() == oauth2User.getState().intValue();
+        return null != state && OAuth2UserState.NORMAL.getCode() == state.intValue();
     }
 
-    public OAuth2User getOauth2User() {
-        return oauth2User;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
+    public String getShowName() {
+        return showName;
+    }
+
+    public void setShowName(String showName) {
+        this.showName = showName;
+    }
+
+    public String getHeadPicture() {
+        return headPicture;
+    }
+
+    public void setHeadPicture(String headPicture) {
+        this.headPicture = headPicture;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
+    public Long getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Long createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getLoginIp() {
+        return loginIp;
+    }
+
+    public void setLoginIp(String loginIp) {
+        this.loginIp = loginIp;
+    }
+
+    public Long getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(Long loginTime) {
+        this.loginTime = loginTime;
     }
 }

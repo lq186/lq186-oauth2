@@ -14,20 +14,14 @@
     limitations under the License.
 */
 /*
-    FileName: EntityMapping.java
-    Date: 2019/3/11
+    FileName: AccessTokenProperties.java
+    Date: 2019/3/19
     Author: lq
 */
 package com.lq186.oauth2.consts;
 
-public final class EntityMapping {
+public final class AccessTokenProperties {
 
-    private static final String PREFIX = "oauth2_";
-
-    public static final String OAUTH2_CLIENT = PREFIX + "client";
-
-    public static final String OAUTH2_USER = PREFIX + "user";
-
-    public static final String OAUTH2_OPENID = PREFIX + "openid";
+    public static final String OPEN_ID = "openid";
 
 }

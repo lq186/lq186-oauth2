@@ -39,7 +39,7 @@ public class OAuth2ClientServiceImpl implements OAuth2ClientService {
     public Optional<OAuth2ClientDTO> getByClientId(String clientId) {
         Optional<OAuth2Client> optional = clientRepo.getByClientId(clientId);
         if (optional.isPresent()) {
-            return Optional.of(new OAuth2ClientDTO(optional.get()));
+            return Optional.of(new OAuth2ClientDTO().fromEntity(optional.get()));
         }
         return Optional.empty();
     }

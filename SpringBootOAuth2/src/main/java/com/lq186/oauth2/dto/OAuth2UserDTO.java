@@ -26,7 +26,7 @@ import com.lq186.common.util.EnumUtils;
 import com.lq186.oauth2.entity.OAuth2User;
 import com.lq186.oauth2.state.OAuth2UserState;
 
-public class OAuth2UserDTO extends AbstractDataTransferObject<OAuth2User> {
+public class OAuth2UserDTO extends AbstractDataTransferObject<OAuth2User, OAuth2UserDTO> {
 
     @JsonProperty("username")
     private String username;
@@ -55,12 +55,8 @@ public class OAuth2UserDTO extends AbstractDataTransferObject<OAuth2User> {
     @JsonProperty("login_time")
     private Long loginTime;
 
-    public OAuth2UserDTO(OAuth2User entity) {
-        super(entity);
-    }
-
     @Override
-    protected void afterProperties(OAuth2User oAuth2User) {
+    protected void fromEntityAfterProperties(OAuth2User oAuth2User) {
         this.pwd = "******";
         this.stateName = EnumUtils.ofValue(OAuth2UserState.class, this.state, "code").getDisplay();
     }

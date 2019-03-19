@@ -25,6 +25,7 @@ import com.lq186.oauth2.entity.OAuth2User;
 import com.lq186.oauth2.repo.OAuth2UserRepo;
 import com.lq186.oauth2.state.OAuth2UserState;
 import com.lq186.oauth2.user.SimpleUserDetailsImpl;
+import com.lq186.oauth2.util.UserDetailsUtils;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -47,13 +48,13 @@ public class JpaUserDetailsServiceImpl implements UserDetailsService {
             OAuth2UserState state = EnumUtils.ofValue(OAuth2UserState.class, optional.get().getState(), "code");
             switch (state) {
                 case NORMAL:
-                    return new SimpleUserDetailsImpl(optional.get());
+                    return UserDetailsUtils.fromOAuth2User(optional.get());
                 case LOCKED:
                     throw new BadCredentialsException(String.format("用户[%s]已经被锁定", username));
                 case DISABLED:
                     throw new BadCredentialsException(String.format("用户[%s]已经被禁用", username));
             }
-            return new SimpleUserDetailsImpl(optional.get());
+            throw new BadCredentialsException(String.format("用户[%s]状态异常", username));
         }
         throw new UsernameNotFoundException(String.format("用户名[%s]不存在", username));
     }

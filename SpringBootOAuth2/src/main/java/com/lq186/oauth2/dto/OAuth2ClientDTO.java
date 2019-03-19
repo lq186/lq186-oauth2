@@ -26,11 +26,7 @@ import com.lq186.common.util.EnumUtils;
 import com.lq186.oauth2.entity.OAuth2Client;
 import com.lq186.oauth2.state.OAuth2ClientState;
 
-public final class OAuth2ClientDTO extends AbstractDataTransferObject<OAuth2Client> {
-
-    public OAuth2ClientDTO(OAuth2Client entity) {
-        super(entity);
-    }
+public final class OAuth2ClientDTO extends AbstractDataTransferObject<OAuth2Client, OAuth2ClientDTO> {
 
     @JsonProperty("client_id")
     private String clientId; // 客户端ID
@@ -60,7 +56,7 @@ public final class OAuth2ClientDTO extends AbstractDataTransferObject<OAuth2Clie
     private Long createdTime; // 创建时间
 
     @Override
-    protected void afterProperties(OAuth2Client oAuth2Client) {
+    protected void fromEntityAfterProperties(OAuth2Client oAuth2Client) {
         this.clientSecret = "******";
         this.stateName = EnumUtils.ofValue(OAuth2ClientState.class, this.state, "code").getDisplay();
     }

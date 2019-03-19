@@ -1,8 +1,8 @@
 server:
   port: 10080
 
-spring:
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    password: sc_baas_123
+#spring:
+#  redis:
+#    host: 127.0.0.1
+#    port: 6379
+#    password: sc_baas_123

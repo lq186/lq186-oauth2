@@ -24,6 +24,7 @@ import com.lq186.common.util.RandomUtils;
 import com.lq186.oauth2.entity.OAuth2User;
 import com.lq186.oauth2.state.OAuth2UserState;
 import com.lq186.oauth2.user.SimpleUserDetailsImpl;
+import com.lq186.oauth2.util.UserDetailsUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,7 +42,7 @@ public class SimpleUserDetailServiceImpl implements UserDetailsService {
         oauth2User.setHeadPicture(String.format("/images/head/%s.jpg", oauth2User.getBzid()));
         oauth2User.setState(OAuth2UserState.NORMAL.getCode());
         oauth2User.setCreatedTime(System.currentTimeMillis());
-        return new SimpleUserDetailsImpl(oauth2User);
+        return UserDetailsUtils.fromOAuth2User(oauth2User);
     }
 
 }

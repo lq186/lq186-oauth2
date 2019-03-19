@@ -28,11 +28,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 
 @Configuration
 @EnableWebSecurity
-@EnableResourceServer
-@Order(1)
+@Order(6)
 @EnableGlobalMethodSecurity(prePostEnabled = true) //启用方法级的权限认证
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -51,5 +51,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().sameOrigin(); // 同源允许IFrame
     }
 
-
+    @Configuration
+    @EnableResourceServer
+    protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+        @Override
+        public void configure(HttpSecurity http) throws Exception {
+            http.antMatcher("/user").authorizeRequests().anyRequest().authenticated();
+        }
+    }
 }

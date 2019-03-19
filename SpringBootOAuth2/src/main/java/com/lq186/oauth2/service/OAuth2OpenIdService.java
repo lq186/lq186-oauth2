@@ -14,20 +14,16 @@
     limitations under the License.
 */
 /*
-    FileName: EntityMapping.java
-    Date: 2019/3/11
+    FileName: OAuth2OpenIdService.java
+    Date: 2019/3/19
     Author: lq
 */
-package com.lq186.oauth2.consts;
+package com.lq186.oauth2.service;
 
-public final class EntityMapping {
+import com.lq186.oauth2.entity.OAuth2OpenId;
 
-    private static final String PREFIX = "oauth2_";
+public interface OAuth2OpenIdService {
 
-    public static final String OAUTH2_CLIENT = PREFIX + "client";
-
-    public static final String OAUTH2_USER = PREFIX + "user";
-
-    public static final String OAUTH2_OPENID = PREFIX + "openid";
+    OAuth2OpenId getOpenIdCreateNewIfNotExists(String clientId, String username);
 
 }

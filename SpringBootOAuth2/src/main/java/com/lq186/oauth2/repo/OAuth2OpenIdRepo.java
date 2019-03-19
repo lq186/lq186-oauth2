@@ -14,20 +14,18 @@
     limitations under the License.
 */
 /*
-    FileName: EntityMapping.java
-    Date: 2019/3/11
+    FileName: OAuth2OpenIdRepo.java
+    Date: 2019/3/19
     Author: lq
 */
-package com.lq186.oauth2.consts;
+package com.lq186.oauth2.repo;
 
-public final class EntityMapping {
+import com.lq186.oauth2.entity.OAuth2OpenId;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    private static final String PREFIX = "oauth2_";
+import java.util.Optional;
 
-    public static final String OAUTH2_CLIENT = PREFIX + "client";
+public interface OAuth2OpenIdRepo extends JpaRepository<OAuth2OpenId, Long> {
 
-    public static final String OAUTH2_USER = PREFIX + "user";
-
-    public static final String OAUTH2_OPENID = PREFIX + "openid";
-
+    Optional<OAuth2OpenId> getByClientBzidAndUserBzid(String clientBzid, String userBzid);
 }

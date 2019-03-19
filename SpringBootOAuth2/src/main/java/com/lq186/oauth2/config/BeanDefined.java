@@ -22,6 +22,7 @@ package com.lq186.oauth2.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lq186.common.springboot.config.ConfigUtils;
+import com.lq186.oauth2.provider.OpenIdTokenEnhancer;
 import com.lq186.oauth2.repo.OAuth2ClientRepo;
 import com.lq186.oauth2.repo.OAuth2UserRepo;
 import com.lq186.oauth2.service.jpa.JpaClientDetailsServiceImpl;
@@ -38,16 +39,23 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import sun.security.util.SecurityConstants;
 
 import javax.annotation.Resource;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -88,6 +96,11 @@ public class BeanDefined {
     }
 
     @Bean
+    public TokenEnhancer tokenEnhancer() {
+        return new OpenIdTokenEnhancer();
+    }
+
+    @Bean
     public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService());
@@ -104,6 +117,7 @@ public class BeanDefined {
     public AuthorizationServerTokenServices authorizationServerTokenServices() {
         DefaultTokenServices tokenServices = new DefaultTokenServices();
         tokenServices.setTokenStore(tokenStore());
+        tokenServices.setTokenEnhancer(tokenEnhancer());
         tokenServices.setSupportRefreshToken(true);
         tokenServices.setAccessTokenValiditySeconds((int) TimeUnit.HOURS.toSeconds(2));
         tokenServices.setRefreshTokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(1));
