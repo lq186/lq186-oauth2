@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: dev
+
+frontend:
+  title: Shiro OAuth2 Server

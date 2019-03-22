@@ -1,0 +1,92 @@
+@charset "utf-8";
+
+.body-container {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.login-container {
+    margin: 10mm auto;
+    width: 150mm;
+    border-radius: 5px;
+    box-shadow: 0mm 0mm 5mm #696969;
+}
+
+.login-title {
+    margin: 5mm 0 10mm 0;
+    text-align: center;
+    color: #696969;
+}
+
+.login-form {
+    padding: 20px;
+    text-align: left;
+}
+
+.form-container {
+    margin: 0 auto;
+    padding: 0 10%;
+}
+
+.form-container div {
+    margin: 1mm 0 5mm 0;
+}
+
+.form-container label {
+    color: #696969;
+}
+
+input {
+    width: calc(100% - 6px);
+    line-height: 45px;
+    border-radius: 3px;
+    border: 1px solid #58ACFA;
+    padding: 0 3px;
+}
+
+input:active, input:focus {
+    border-color: #58ACFA;
+    -webkit-transition: border linear .2s, -webkit-box-shadow linear .5s;
+    -webkit-box-shadow: 0 0 3px #58ACFA;
+    -moz-box-shadow: 0 0 3px #58ACFA;
+    box-shadow: 0 0 3px #58ACFA;
+}
+
+.btn {
+    width: 100%;
+    line-height: 45px;
+    cursor: pointer;
+    border-radius: 3px;
+    background-color: #58ACFA;
+    color: white;
+    border: 1px solid #58ACFA;
+    font-weight: bold;
+}
+
+.btn:focus {
+    border-color: #58ACFA;
+    -webkit-transition: border linear .2s, -webkit-box-shadow linear .5s;
+    -webkit-box-shadow: 0 0 3px #58ACFA;
+    -moz-box-shadow: 0 0 3px #58ACFA;
+    box-shadow: 0 0 3px #58ACFA;
+}
+
+.error {
+    color: #dc143c;
+    display: block;
+}
+
+/** grant */
+.grant-container {
+    margin: 10mm auto;
+    width: 90%;
+    border-radius: 5px;
+    box-shadow: 0mm 0mm 5mm #696969;
+}
+
+.grant-title {
+    margin: 5mm 0 10mm 0;
+    text-align: center;
+    color: #696969;
+}
