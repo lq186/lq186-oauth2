@@ -31,12 +31,14 @@ import com.lq186.shiro.oauth2.service.AuthorizationCodeService;
 import com.lq186.shiro.oauth2.service.OAuth2ClientService;
 import com.lq186.shiro.oauth2.util.ResponseUtils;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
+import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
 import org.apache.oltu.oauth2.as.request.OAuthTokenRequest;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;
 import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.OAuthResponse;
+import org.apache.oltu.oauth2.common.message.types.ResponseType;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -50,7 +52,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class AuthorizationController {
@@ -67,71 +71,50 @@ public class AuthorizationController {
     @RequestMapping(value = {"/oauth/authorize"})
     public Object authorize(HttpServletRequest request) throws OAuthSystemException, URISyntaxException {
 
-        OAuthTokenRequest tokenRequest;
+        OAuthAuthzRequest authzRequest;
         try {
-            tokenRequest = new OAuthTokenRequest(request);
+            authzRequest = new OAuthAuthzRequest(request);
         } catch (OAuthProblemException e) {
             return ResponseUtils.errorResponse(HttpServletResponse.SC_BAD_REQUEST, e);
         }
 
-        if (StringUtils.isBlank(tokenRequest.getClientId())) {
+        if (StringUtils.isBlank(authzRequest.getClientId())) {
             return ResponseUtils.errorClientIdResponse();
         }
 
-        Optional<OAuth2Client> clientOptional = clientService.getByClientId(tokenRequest.getClientId());
+        Optional<OAuth2Client> clientOptional = clientService.getByClientId(authzRequest.getClientId());
         if (!clientOptional.isPresent()) {
             return ResponseUtils.errorClientIdResponse();
         }
 
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
-            if (!login(subject, request)) {
-                return "login";
-            }
+            return "login";
+        }
+
+        Object isGrant = subject.getSession(true).getAttribute("is_grant");
+        if (null == isGrant || !(isGrant instanceof Boolean) || !(Boolean) isGrant) {
+            return "grant";
         }
 
         AdditionalInfoOAuthToken token = new AdditionalInfoOAuthToken(oAuthIssuer.accessToken(),
                 AccessTokenProperties.TOKEN_TYPE_VALUE,
                 AccessTokenProperties.EXPIRES_IN_VALUE,
-                oAuthIssuer.refreshToken(), tokenRequest.getParam(OAuth.OAUTH_SCOPE));
+                oAuthIssuer.refreshToken(), authzRequest.getScopes().stream().collect(Collectors.joining(" ")));
         String authorizationCode = authorizationCodeService.createAuthorizationCode(token);
 
         OAuthASResponse.OAuthAuthorizationResponseBuilder builder =
                 OAuthASResponse.authorizationResponse(request, HttpServletResponse.SC_FOUND);
         builder.setCode(authorizationCode);
 
-        String redirectURI = tokenRequest.getParam(OAuth.OAUTH_REDIRECT_URI);
-        final OAuthResponse response = builder.location(redirectURI).buildQueryMessage();
+        builder.setParam(OAuth.OAUTH_STATE, authzRequest.getState());
+
+        final OAuthResponse response = builder.location(authzRequest.getRedirectURI()).buildQueryMessage();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(new URI(response.getLocationUri()));
         return new ResponseEntity(headers, HttpStatus.valueOf(response.getResponseStatus()));
 
-    }
-
-    private boolean login(final Subject subject, final HttpServletRequest request) {
-        if (HttpMethod.GET.matches(request.getMethod())) {
-            request.setAttribute(RequestAttributes.ERROR, ErrorDescriptions.UNSUPPORTED_HTTP_METHOD);
-            return false;
-        }
-
-        final String username = request.getParameter(ParameterNames.USERNAME);
-        final String password = request.getParameter(ParameterNames.PASSWORD);
-
-        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
-            request.setAttribute(RequestAttributes.ERROR, ErrorDescriptions.INVALID_USERNAME_OR_PASSWORD);
-            return false;
-        }
-
-        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password);
-
-        try {
-            subject.login(usernamePasswordToken);
-            return true;
-        } catch (AuthenticationException e) {
-            request.setAttribute(RequestAttributes.ERROR, ErrorDescriptions.INVALID_USERNAME_OR_PASSWORD);
-            return false;
-        }
     }
 
 }

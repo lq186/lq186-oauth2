@@ -22,7 +22,7 @@
             <div>
                 <button type="submit" class="btn">登 录</button>
             </div>
-            <div class="error" th:if="${session.SPRING_SECURITY_LAST_EXCEPTION}" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}">
+            <div class="error" th:if="${error}" th:text="${error}">
             </div>
         </div>
     </form>

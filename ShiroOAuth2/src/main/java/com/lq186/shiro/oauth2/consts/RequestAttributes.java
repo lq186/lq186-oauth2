@@ -24,4 +24,7 @@ public final class RequestAttributes {
 
     public static final String ERROR = "error";
 
+    public static final String SHIRO_LOGIN_FAILURE = "shiroLoginFailure";
+
+    public static final String ERROR_DESCRIPTIONS = "error_descriptions";
 }

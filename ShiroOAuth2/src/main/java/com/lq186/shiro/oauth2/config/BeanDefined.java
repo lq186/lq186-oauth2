@@ -21,9 +21,18 @@
 package com.lq186.shiro.oauth2.config;
 
 import com.lq186.shiro.oauth2.auth.*;
+import com.lq186.shiro.oauth2.realm.OAuth2UserRealm;
 import com.lq186.shiro.oauth2.service.AuthorizationCodeService;
 import com.lq186.shiro.oauth2.service.OAuth2ClientService;
 import com.lq186.shiro.oauth2.service.OAuth2UserService;
+import org.apache.oltu.oauth2.as.issuer.MD5Generator;
+import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
+import org.apache.oltu.oauth2.as.issuer.OAuthIssuerImpl;
+import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
@@ -40,6 +49,25 @@ public class BeanDefined {
 
     @Resource
     private AuthorizationCodeService authorizationCodeService;
+
+    @Bean
+    public OAuthIssuer oAuthIssuer() {
+        return new OAuthIssuerImpl(new MD5Generator());
+    }
+
+    @Bean
+    public SecurityManager securityManager() {
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setRealm(new OAuth2UserRealm(userService));
+        return securityManager;
+    }
+
+    @Bean
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        shiroFilterFactoryBean.setSecurityManager(securityManager);
+        return shiroFilterFactoryBean;
+    }
 
     @PostConstruct
     public void postConstruct() {

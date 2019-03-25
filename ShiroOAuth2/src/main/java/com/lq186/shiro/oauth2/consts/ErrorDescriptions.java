@@ -32,4 +32,8 @@ public final class ErrorDescriptions {
 
     public static final String UNSUPPORTED_HTTP_METHOD = "不支持的HTTP方法";
 
+    public static final String INVALID_RESPONSE_TYPE = "错误的授权响应类型";
+
+    public static final String UNKNOWN_ERROR = "未知的错误";
+
 }
