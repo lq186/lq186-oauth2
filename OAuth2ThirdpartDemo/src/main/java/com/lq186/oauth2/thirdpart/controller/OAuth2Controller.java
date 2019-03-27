@@ -20,6 +20,7 @@
 */
 package com.lq186.oauth2.thirdpart.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lq186.common.springboot.rest.RestRequestBody;
 import com.lq186.common.springboot.rest.RestResponseBody;
 import com.lq186.common.springboot.rest.RestUtils;
@@ -30,11 +31,13 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class OAuth2Controller {
@@ -42,11 +45,15 @@ public class OAuth2Controller {
     @Resource
     private RestTemplate restTemplate;
 
+    @Resource
+    private ObjectMapper objectMapper;
+
     @RequestMapping(value = "/oauth2", produces = MediaType.TEXT_HTML_VALUE)
     public String oauth2(HttpServletRequest request, @RequestParam("code") String code, @RequestParam("state") String state) {
         RestRequestBody requestBody = new RestRequestBody();
         requestBody.setUrl(OAuth2Const.TOKEN_URL);
         requestBody.setMethod(HttpMethod.POST);
+        requestBody.addHeader("Content-Type", "application/x-www-form-urlencoded");
         requestBody.addParameters(OAuth2Const.CLIENT_ID, OAuth2Const.CLIENT_ID_VALUE)
                 .addParameters(OAuth2Const.CLIENT_SECRET, OAuth2Const.CLIENT_SECRET_VALUE)
                 .addParameters(OAuth2Const.REDIRECT_URI, OAuth2Const.REDIRECT_URI_VALUE)
@@ -54,11 +61,18 @@ public class OAuth2Controller {
                 .addParameters(OAuth2Const.STATE, state)
                 .addParameters(OAuth2Const.GRANT_TYPE, OAuth2Const.AUTHORIZATION_CODE)
                 .addParameters(OAuth2Const.CODE, code);
-        RestResponseBody<HashMap> responseBody = RestUtils.exchange(restTemplate, requestBody, HashMap.class);
+        RestResponseBody responseBody = RestUtils.exchange(restTemplate, requestBody, HashMap.class);
         if (HttpStatus.OK == responseBody.getHttpStatus()) {
             request.setAttribute("token", responseBody.getBody());
             return "grant-success";
         } else {
+            Map<String, String> errorMap;
+            try {
+                errorMap = objectMapper.readValue((byte[]) responseBody.getBody(), HashMap.class);
+            } catch (Exception e) {
+                errorMap = new HashMap<>();
+            }
+            request.setAttribute("error", errorMap);
             return "grant-fail";
         }
     }

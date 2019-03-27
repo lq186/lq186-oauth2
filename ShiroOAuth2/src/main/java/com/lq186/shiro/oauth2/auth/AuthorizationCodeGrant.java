@@ -51,7 +51,7 @@ public class AuthorizationCodeGrant extends DefaultOAuthGrant {
     protected ResponseEntity doGrant(OAuthTokenRequest tokenRequest) throws OAuthSystemException {
         String code = tokenRequest.getParam(OAuth.OAUTH_CODE);
         OAuthToken oAuthToken;
-        if (StringUtils.isBlank(code) || (null == (oAuthToken = authorizationCodeService.consumeAuthorizationCode(code)))) {
+        if (StringUtils.isBlank(code) || (null == (oAuthToken = authorizationCodeService.consumeAuthorizationCode(tokenRequest.getClientId(), code)))) {
             return ResponseUtils.errorResponse(HttpServletResponse.SC_BAD_REQUEST,
                     OAuthError.TokenResponse.INVALID_GRANT,
                     ErrorDescriptions.INVALID_CODE);

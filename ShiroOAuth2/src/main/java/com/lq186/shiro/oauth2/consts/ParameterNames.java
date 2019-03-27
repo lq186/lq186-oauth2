@@ -26,4 +26,6 @@ public final class ParameterNames {
 
     public static final String PASSWORD = "password";
 
+    public static final String USER_OAUTH_APPROVAL = "user_oauth_approval";
+
 }

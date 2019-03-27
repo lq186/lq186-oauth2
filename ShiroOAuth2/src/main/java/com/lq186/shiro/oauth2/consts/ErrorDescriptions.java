@@ -36,4 +36,7 @@ public final class ErrorDescriptions {
 
     public static final String UNKNOWN_ERROR = "未知的错误";
 
+    public static final String ACCESS_DENIED = "授权错误，禁止访问";
+
+    public static final String INVALID_TOKEN = "无效的TOKEN凭证";
 }

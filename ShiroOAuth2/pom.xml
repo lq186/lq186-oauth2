@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.lq186</groupId>
     <artifactId>shiro-oauth2</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>shiro-oauth2</name>
     <description>Shiro OAuht2 简单示例</description>
 

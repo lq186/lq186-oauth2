@@ -24,8 +24,8 @@ import org.apache.oltu.oauth2.common.token.OAuthToken;
 
 public interface AuthorizationCodeService {
 
-    String createAuthorizationCode(OAuthToken authToken);
+    String createAuthorizationCode(String clientId, OAuthToken authToken);
 
-    OAuthToken consumeAuthorizationCode(String code);
+    OAuthToken consumeAuthorizationCode(String clientId, String code);
 
 }

@@ -23,6 +23,7 @@ package com.lq186.shiro.oauth2.realm;
 import com.lq186.shiro.oauth2.enitty.OAuth2User;
 import com.lq186.shiro.oauth2.service.OAuth2UserService;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -35,8 +36,11 @@ public final class OAuth2UserRealm extends AuthorizingRealm {
 
     private final OAuth2UserService userService;
 
-    public OAuth2UserRealm(OAuth2UserService userService) {
+    private final CredentialsMatcher credentialsMatcher;
+
+    public OAuth2UserRealm(OAuth2UserService userService, CredentialsMatcher credentialsMatcher) {
         this.userService = userService;
+        this.credentialsMatcher = credentialsMatcher;
     }
 
     @Override
@@ -63,5 +67,10 @@ public final class OAuth2UserRealm extends AuthorizingRealm {
         } else {
             throw new UnknownAccountException();
         }
+    }
+
+    @Override
+    public CredentialsMatcher getCredentialsMatcher() {
+        return credentialsMatcher;
     }
 }

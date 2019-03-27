@@ -14,20 +14,19 @@
     limitations under the License.
 */
 /*
-    FileName: OAuth2OpenIdService.java
-    Date: 2019/3/22
+    FileName: SessionAttributes.java
+    Date: 2019/3/26
     Author: lq
 */
-package com.lq186.shiro.oauth2.service;
+package com.lq186.shiro.oauth2.consts;
 
-import com.lq186.shiro.oauth2.enitty.OAuth2Client;
-import com.lq186.shiro.oauth2.enitty.OAuth2OpenId;
-import com.lq186.shiro.oauth2.enitty.OAuth2User;
+public final class SessionAttributes {
 
-import javax.validation.constraints.NotNull;
+    public static final String AUTHORIZATION_REDIRECT_URI = "LQ186_OAUTH2_AUTHORIZATION_REDIRECT_URI";
 
-public interface OAuth2OpenIdService {
+    public static final String AUTHORIZATION_CONFIRM_ACCESS = "LQ186_OAUTH2_AUTHORIZATION_CONFIRM_ACCESS";
 
-    OAuth2OpenId getOpenIdCreateNewIfNotExists(@NotNull OAuth2Client client, @NotNull OAuth2User user);
+    public static final String AUTHORIZATION_REQUEST_PARAM_MAP = "LQ186_OAUTH2_AUTHORIZATION_REQUEST";
 
+    public static final String AUTHORIZATION_REQUEST_CLINET_INFO = "LQ186_OAUTH2_AUTHORIZATION_CLINET_INFO";
 }

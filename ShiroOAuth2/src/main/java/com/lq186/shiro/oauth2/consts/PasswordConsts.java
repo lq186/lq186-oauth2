@@ -14,20 +14,15 @@
     limitations under the License.
 */
 /*
-    FileName: OAuth2OpenIdService.java
-    Date: 2019/3/22
+    FileName: PasswordConsts.java
+    Date: 2019/3/26
     Author: lq
 */
-package com.lq186.shiro.oauth2.service;
+package com.lq186.shiro.oauth2.consts;
 
-import com.lq186.shiro.oauth2.enitty.OAuth2Client;
-import com.lq186.shiro.oauth2.enitty.OAuth2OpenId;
-import com.lq186.shiro.oauth2.enitty.OAuth2User;
+public final class PasswordConsts {
 
-import javax.validation.constraints.NotNull;
+    public static final String HASH_ALGORITHM_NAME = "MD5";
 
-public interface OAuth2OpenIdService {
-
-    OAuth2OpenId getOpenIdCreateNewIfNotExists(@NotNull OAuth2Client client, @NotNull OAuth2User user);
-
+    public static final int HASH_ITERATIONS = 1;
 }

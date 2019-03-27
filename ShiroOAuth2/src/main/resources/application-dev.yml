@@ -1,5 +1,10 @@
 debug: true
 
+logging:
+  level:
+    org:
+      hibernate: trace
+
 server:
   port: 8080
 

@@ -14,20 +14,24 @@
     limitations under the License.
 */
 /*
-    FileName: OAuth2OpenIdService.java
-    Date: 2019/3/22
+    FileName: OAuth2TokenStoreService.java
+    Date: 2019/3/27
     Author: lq
 */
 package com.lq186.shiro.oauth2.service;
 
 import com.lq186.shiro.oauth2.enitty.OAuth2Client;
-import com.lq186.shiro.oauth2.enitty.OAuth2OpenId;
 import com.lq186.shiro.oauth2.enitty.OAuth2User;
+import org.apache.oltu.oauth2.common.token.OAuthToken;
 
-import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
-public interface OAuth2OpenIdService {
+public interface OAuth2TokenStoreService {
 
-    OAuth2OpenId getOpenIdCreateNewIfNotExists(@NotNull OAuth2Client client, @NotNull OAuth2User user);
+    Optional<OAuthToken> getByAccessToken(String accessToken);
+
+    Optional<OAuth2User> getUsernameByAccessToken(String accessToken);
+
+    void saveToken(OAuthToken token, OAuth2Client client, OAuth2User oAuth2User);
 
 }

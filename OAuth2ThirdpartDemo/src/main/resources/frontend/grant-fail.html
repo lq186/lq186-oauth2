@@ -5,6 +5,10 @@
     <title>OAuth2 授权失败</title>
 </head>
 <body>
-授权失败
+error:
+<span th:text="${error.error}"></span>
+<br/>
+error_description:
+<span th:text="${error.error_description}"></span>
 </body>
 </html>

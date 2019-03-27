@@ -9,19 +9,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class InMemoryAuthorizationCodeServiceImpl implements AuthorizationCodeService {
+public final class InMemoryAuthorizationCodeServiceImpl implements AuthorizationCodeService {
 
     private static final Map<String, OAuthToken> TOKEN_MAP = new HashMap<>();
 
     @Override
-    public String createAuthorizationCode(OAuthToken authToken) {
+    public String createAuthorizationCode(String clientId, OAuthToken authToken) {
         String code = RandomUtils.randomString(6);
-        TOKEN_MAP.put(code, authToken);
+        TOKEN_MAP.put(buildKey(clientId, code), authToken);
         return code;
     }
 
     @Override
-    public OAuthToken consumeAuthorizationCode(String code) {
-        return TOKEN_MAP.get(code);
+    public OAuthToken consumeAuthorizationCode(String clientId, String code) {
+        return TOKEN_MAP.remove(buildKey(clientId, code));
+    }
+
+    private final String buildKey(String clientId, String code) {
+        return clientId + ":" + code;
     }
 }

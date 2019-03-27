@@ -21,8 +21,6 @@
 package com.lq186.shiro.oauth2.controller;
 
 import com.lq186.shiro.oauth2.auth.OAuthGrantChainContext;
-import com.lq186.shiro.oauth2.service.OAuth2ClientService;
-import com.lq186.shiro.oauth2.service.OAuth2UserService;
 import com.lq186.shiro.oauth2.util.ResponseUtils;
 import org.apache.oltu.oauth2.as.request.OAuthTokenRequest;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
@@ -31,18 +29,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class TokenController {
-
-    @Resource
-    private OAuth2ClientService clientService;
-
-    @Resource
-    private OAuth2UserService userService;
 
     @RequestMapping(value = "/oauth/token", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity token(HttpServletRequest request) throws Exception {
@@ -50,6 +41,7 @@ public class TokenController {
         try {
             tokenRequest = new OAuthTokenRequest(request);
         } catch (OAuthProblemException e) {
+            e.printStackTrace();
             return ResponseUtils.errorResponse(HttpServletResponse.SC_BAD_REQUEST, e);
         }
 
